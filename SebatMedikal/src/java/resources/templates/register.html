@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<title>User Registration</title>
+</head>
+<body>
+	<nav role="navigation">
+		<ul>
+			<li><a href="/">Home</a></li>
+		</ul>
+	</nav>
+
+	<form th:action="@{/users/register}" method="post"
+		enctype="multipart/form-data">
+		<table>
+			<tr>
+				<td>User Name:</td>
+				<td><input type="text" th:field="${user.username}" /></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type="password" th:field="${user.password}" /></td>
+			</tr>
+			<tr>
+				<td>Name:</td>
+				<td><input type="text" th:field="${user.firstName}" /></td>
+			</tr>
+			<tr>
+				<td>Last Name:</td>
+				<td><input type="text" th:field="${user.lastName}" /></td>
+			</tr>
+			<tr>
+				<td>Type:</td>
+				<td><select th:field="${user.role}">
+						<option th:each="userType : ${roles}"
+							th:value="${userType.id}" th:text="${userType.roleName}">Usertype
+							</option>
+				</select></td>
+			</tr>
+			<tr>
+				<td>File to upload:</td>
+				<td><input type="file" name="file" /></td>
+			</tr>
+			<tr>
+				<td><button type="submit">Submit</button></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
