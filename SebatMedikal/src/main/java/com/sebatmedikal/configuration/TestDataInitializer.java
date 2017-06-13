@@ -71,7 +71,7 @@ public class TestDataInitializer implements CommandLineRunner {
 		user1.setPassword("a");
 		user1.setRole(roles.get(0));
 		user1.setCreatedBy("sebat.medikal");
-		user1.setFcmRegistrationId("czigGDynriM:APA91bEr91-U_nyGadFotz4X-NjSkHOC-qVDjLxn40ri-aX6OuAIJ9p2e1J51eCU3_bhdcerfzOh4Mw2EPC8u55IybcpIvrxXhkEUucY3mpyDAmeJjMmU8d11l-9w05xdqfx1sxZOvJU");
+		user1.setFcmRegistrationId("dgMkN1fyOK0:APA91bEKMgAxUj9J-5L-Ni0MJsYOYW1ToTvwANy_pMsIm5m_yJGeuhbWRryTk68vbERH-ycSo9lQOH5Jbyj8YC_OF9_lQKtRZdMQkF6J37OZP1EX5gq4q8CeWN-MTgTwN0bXdg72vcij");
 		userService.save(user1);
 
 		List<Brand> brands = new ArrayList<>();

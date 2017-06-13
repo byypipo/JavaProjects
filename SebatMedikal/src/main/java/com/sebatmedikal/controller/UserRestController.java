@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sebatmedikal.UserSession;
 import com.sebatmedikal.configuration.ErrorCodes;
 import com.sebatmedikal.domain.Login;
+import com.sebatmedikal.domain.Role;
 import com.sebatmedikal.domain.User;
 import com.sebatmedikal.model.request.RequestModel;
 import com.sebatmedikal.model.request.RequestModelUser;
@@ -26,6 +27,7 @@ import com.sebatmedikal.model.response.ResponseModel;
 import com.sebatmedikal.model.response.ResponseModelError;
 import com.sebatmedikal.model.response.ResponseModelLogin;
 import com.sebatmedikal.model.response.ResponseModelSuccess;
+import com.sebatmedikal.service.RoleService;
 import com.sebatmedikal.service.UserService;
 import com.sebatmedikal.util.CompareUtil;
 import com.sebatmedikal.util.LogUtil;
@@ -36,6 +38,8 @@ import com.sebatmedikal.util.NullUtil;
 public class UserRestController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleService roleService;
 	@Autowired
 	private UserSession userSession;
 
@@ -143,11 +147,17 @@ public class UserRestController {
 			return new ResponseModelError().setErrorCode(ErrorCodes.USER_IS_EXIST);
 		}
 
+		long roleId = user.getRole().getId();
+		Role originalRole = roleService.findById(roleId);
+		if (NullUtil.isNull(originalRole)) {
+			return new ResponseModelError().setErrorCode(ErrorCodes.ROLE_NOT_FOUND);
+		}
+
+		user.setRole(originalRole);
 		user.setCreatedBy(userSession.getUser().getUsername());
 		userService.save(user);
 
-		List<User> users = userService.findAll();
-		return new ResponseModelSuccess().setContent(users);
+		return new ResponseModelSuccess().setContent(user);
 	}
 
 	public ResponseModel login(String username, String password, String fcmRegistrationId) {

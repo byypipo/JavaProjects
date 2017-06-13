@@ -65,14 +65,16 @@ public class RequestModel {
 			return false;
 		}
 
+		LogUtil.logMessage(RequestModel.class, rm.getOperation() + " called");
+
 		if (CompareUtil.equal(rm.getOperation(), "login")) {
 			if (NullUtil.isAnyNull(rm.getParameter01(), rm.getParameter02())) {
 				LogUtil.logMessage(RequestModel.class, Level.WARNING, "Login parameters are invalid");
 				return false;
 			}
 		} else {
-			LogUtil.logMessage(RequestModel.class, Level.WARNING, "userSession.getUser(): "+userSession.getUser());
-			LogUtil.logMessage(RequestModel.class, Level.WARNING, "userSession.getAccessToken(): "+userSession.getAccessToken());
+			LogUtil.logMessage(RequestModel.class, Level.WARNING, "userSession.getUser(): " + userSession.getUser());
+			LogUtil.logMessage(RequestModel.class, Level.WARNING, "userSession.getAccessToken(): " + userSession.getAccessToken());
 
 			if (NullUtil.isAnyNull(userSession.getUser(), userSession.getAccessToken())) {
 				LogUtil.logMessage(RequestModel.class, Level.WARNING, "User is not login requested operation: " + rm.getOperation());
