@@ -194,7 +194,7 @@ public class UserRestController {
 
 		if (successful) {
 			GcmPushImpl gcmPushImpl = new GcmPushImpl(SecurityConfiguration.FCM_SERVER_KEY);
-			NotificationSender.login(gcmPushImpl, userService.findAllFcmRegistrationIds(), userSession.getUser());
+			NotificationSender.logout(gcmPushImpl, userService.findAllFcmRegistrationIds(), userSession.getUser());
 			userSession.clear();
 			return new ResponseModelSuccess();
 		} else {
