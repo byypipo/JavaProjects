@@ -9,6 +9,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sebatmedikal.configuration.SecurityConfiguration;
 import com.sebatmedikal.domain.Operation;
+import com.sebatmedikal.domain.User;
 import com.sebatmedikal.gcm.gcm.GcmPushImpl;
 import com.sebatmedikal.gcm.gcm.GcmPushInfo;
 import com.sebatmedikal.gcm.gcm.Notification;
@@ -32,6 +33,26 @@ public class NotificationSender {
 		String data = Mapper.writeValueAsString(operation);
 
 		LogUtil.logMessage(NotificationSender.class, "Operation: " + data);
+
+		GcmPushInfo gcmPushInfo = new GcmPushInfo(usersFcmRegIds, data, notification);
+		send(gcmPushImpl, gcmPushInfo);
+	}
+
+	public static void login(GcmPushImpl gcmPushImpl, ArrayList<String> usersFcmRegIds, User user) {
+		Notification notification = new Notification().setTitle(SecurityConfiguration.LOGIN).setBody(new Date().toString());
+		String data = Mapper.writeValueAsString(user);
+
+		LogUtil.logMessage(NotificationSender.class, "LOGIN User: " + data);
+
+		GcmPushInfo gcmPushInfo = new GcmPushInfo(usersFcmRegIds, data, notification);
+		send(gcmPushImpl, gcmPushInfo);
+	}
+
+	public static void logout(GcmPushImpl gcmPushImpl, ArrayList<String> usersFcmRegIds, User user) {
+		Notification notification = new Notification().setTitle(SecurityConfiguration.LOGOUT).setBody(new Date().toString());
+		String data = Mapper.writeValueAsString(user);
+
+		LogUtil.logMessage(NotificationSender.class, "LOGOUT User: " + data);
 
 		GcmPushInfo gcmPushInfo = new GcmPushInfo(usersFcmRegIds, data, notification);
 		send(gcmPushImpl, gcmPushInfo);

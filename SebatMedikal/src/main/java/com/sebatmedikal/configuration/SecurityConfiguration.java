@@ -60,4 +60,6 @@ public class SecurityConfiguration {
 	public static String NEW_OPERATION = "NEW_OPERATION";
 	public static String NEW_MESSAGE = "NEW_MESSAGE";
 	public static String NEW_PRODUCT = "NEW_PRODUCT";
+	public static String LOGIN = "LOGIN";
+	public static String LOGOUT = "LOGOUT";
 }

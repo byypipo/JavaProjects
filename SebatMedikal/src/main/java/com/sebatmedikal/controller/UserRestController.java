@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sebatmedikal.UserSession;
 import com.sebatmedikal.configuration.ErrorCodes;
+import com.sebatmedikal.configuration.SecurityConfiguration;
 import com.sebatmedikal.domain.Login;
 import com.sebatmedikal.domain.Role;
 import com.sebatmedikal.domain.User;
+import com.sebatmedikal.gcm.NotificationSender;
+import com.sebatmedikal.gcm.gcm.GcmPushImpl;
 import com.sebatmedikal.model.request.RequestModel;
 import com.sebatmedikal.model.request.RequestModelUser;
 import com.sebatmedikal.model.response.ResponseModel;
@@ -172,6 +175,9 @@ public class UserRestController {
 		}
 
 		userSession.setUser(user);
+
+		GcmPushImpl gcmPushImpl = new GcmPushImpl(SecurityConfiguration.FCM_SERVER_KEY);
+		NotificationSender.login(gcmPushImpl, userService.findAllFcmRegistrationIds(), user);
 		return new ResponseModelLogin().setUser(user).setAccessToken(userSession.getAccessToken());
 	}
 
@@ -187,6 +193,8 @@ public class UserRestController {
 		boolean successful = userService.logout(username);
 
 		if (successful) {
+			GcmPushImpl gcmPushImpl = new GcmPushImpl(SecurityConfiguration.FCM_SERVER_KEY);
+			NotificationSender.login(gcmPushImpl, userService.findAllFcmRegistrationIds(), userSession.getUser());
 			userSession.clear();
 			return new ResponseModelSuccess();
 		} else {
