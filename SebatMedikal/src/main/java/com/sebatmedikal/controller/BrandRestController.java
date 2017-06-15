@@ -58,6 +58,8 @@ public class BrandRestController {
 			switch (rmb.getOperation()) {
 			case "findAll":
 				return findAll();
+			case "findAllOnlyName":
+				return findAllOnlyName();
 			case "findOne":
 				return findOne(Integer.parseInt(rmb.getParameter01()));
 			case "products":
@@ -80,6 +82,11 @@ public class BrandRestController {
 	public ResponseModel findAll() {
 		List<Brand> brands = brandService.findAll();
 		return new ResponseModelSuccess().setContent(brands);
+	}
+
+	public ResponseModel findAllOnlyName() {
+		List<String> brandNames = brandService.findAllOnlyName();
+		return new ResponseModelSuccess().setContent(brandNames);
 	}
 
 	public ResponseModel findOne(long id) {
@@ -143,8 +150,7 @@ public class BrandRestController {
 		brand.setCreatedBy(userSession.getUser().getUsername());
 		brandService.save(brand);
 
-		List<Brand> brands = brandService.findAll();
-		return new ResponseModelSuccess().setContent(brands);
+		return new ResponseModelSuccess().setContent(brand);
 	}
 
 	public ResponseModel delete(long id) {

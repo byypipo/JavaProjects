@@ -62,7 +62,7 @@ public class BrandService {
 		brandRepository.delete(id);
 	}
 
-	public List<String> getBrandNames() {
+	public List<String> findAllOnlyName() {
 		List<String> brandNames = new ArrayList<String>();
 		Iterator<Brand> iterator = findAll().iterator();
 

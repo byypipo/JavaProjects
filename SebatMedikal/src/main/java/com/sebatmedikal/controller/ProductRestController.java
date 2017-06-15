@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sebatmedikal.UserSession;
 import com.sebatmedikal.configuration.ErrorCodes;
 import com.sebatmedikal.configuration.SecurityConfiguration;
+import com.sebatmedikal.domain.Brand;
 import com.sebatmedikal.domain.Operation;
 import com.sebatmedikal.domain.OperationType;
 import com.sebatmedikal.domain.Product;
@@ -32,6 +33,7 @@ import com.sebatmedikal.model.request.RequestModelProduct;
 import com.sebatmedikal.model.response.ResponseModel;
 import com.sebatmedikal.model.response.ResponseModelError;
 import com.sebatmedikal.model.response.ResponseModelSuccess;
+import com.sebatmedikal.service.BrandService;
 import com.sebatmedikal.service.OperationService;
 import com.sebatmedikal.service.OperationTypeService;
 import com.sebatmedikal.service.ProductService;
@@ -48,6 +50,9 @@ public class ProductRestController {
 
 	@Autowired
 	private OperationService operationService;
+
+	@Autowired
+	private BrandService brandService;
 
 	@Autowired
 	private OperationTypeService operationTypeService;
@@ -255,11 +260,17 @@ public class ProductRestController {
 			return new ResponseModelError().setErrorCode(ErrorCodes.PRODUCT_IS_EXIST);
 		}
 
+		String brandName = product.getBrand().getBrandName();
+		Brand brand = brandService.findByName(brandName);
+		if (NullUtil.isNull(brand)) {
+			return new ResponseModelError().setErrorCode(ErrorCodes.BRAND_NOT_FOUND);
+		}
+
+		product.setBrand(brand);
 		product.setCreatedBy(userSession.getUser().getUsername());
 		productService.save(product);
 
-		List<Product> products = productService.findAll();
-		return new ResponseModelSuccess().setContent(products);
+		return new ResponseModelSuccess().setContent(product);
 	}
 
 	public ResponseModel delete(long id) {
