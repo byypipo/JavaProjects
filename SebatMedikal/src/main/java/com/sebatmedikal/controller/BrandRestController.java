@@ -68,6 +68,8 @@ public class BrandRestController {
 				return createdBy(Integer.parseInt(rmb.getParameter01()));
 			case "create":
 				return create(rmb.getBrand());
+			case "update":
+				return update(rmb.getBrand());
 			case "delete":
 				return delete(Integer.parseInt(rmb.getParameter01()));
 			default:
@@ -148,6 +150,16 @@ public class BrandRestController {
 		}
 
 		brand.setCreatedBy(userSession.getUser().getUsername());
+		brandService.save(brand);
+
+		return new ResponseModelSuccess().setContent(brand);
+	}
+
+	public ResponseModel update(Brand brand) {
+		if (NullUtil.isNull(brand)) {
+			return new ResponseModelError().setErrorCode(ErrorCodes.BRAND_CANNOT_BE_NULL);
+		}
+
 		brandService.save(brand);
 
 		return new ResponseModelSuccess().setContent(brand);
