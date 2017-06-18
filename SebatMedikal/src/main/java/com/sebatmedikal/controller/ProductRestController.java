@@ -96,6 +96,8 @@ public class ProductRestController {
 				return createdBy(Integer.parseInt(rmp.getParameter01()));
 			case "create":
 				return create(rmp.getProduct());
+			case "update":
+				return update(rmp.getProduct());
 			case "delete":
 				return delete(Integer.parseInt(rmp.getParameter01()));
 			default:
@@ -205,6 +207,10 @@ public class ProductRestController {
 		int responseCode = operationService.save(operation);
 
 		if (CompareUtil.equal(responseCode, ErrorCodes.SUCCESSFULLY)) {
+			// errorCode=MessageTooBig
+			product.setImage(null);
+			product.getBrand().setImage(null);
+
 			GcmPushImpl gcmPushImpl = new GcmPushImpl(SecurityConfiguration.FCM_SERVER_KEY);
 			NotificationSender.operation(gcmPushImpl, userService.findAllFcmRegistrationIds(), operation);
 
@@ -268,6 +274,16 @@ public class ProductRestController {
 
 		product.setBrand(brand);
 		product.setCreatedBy(userSession.getUser().getUsername());
+		productService.save(product);
+
+		return new ResponseModelSuccess().setContent(product);
+	}
+
+	public ResponseModel update(Product product) {
+		if (NullUtil.isNull(product)) {
+			return new ResponseModelError().setErrorCode(ErrorCodes.PRODUCT_CANNOT_BE_NULL);
+		}
+
 		productService.save(product);
 
 		return new ResponseModelSuccess().setContent(product);
