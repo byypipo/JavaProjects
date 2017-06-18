@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -111,6 +112,11 @@ public class ProductRestController {
 
 	public ResponseModel findAll() {
 		List<Product> products = productService.findAll();
+
+		User currentUser = userSession.getUser();
+		currentUser.setReadedProductsDate(new Date());
+		userService.save(currentUser);
+
 		return new ResponseModelSuccess().setContent(products);
 	}
 

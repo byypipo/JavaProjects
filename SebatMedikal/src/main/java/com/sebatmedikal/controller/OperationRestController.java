@@ -1,6 +1,7 @@
 package com.sebatmedikal.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.sebatmedikal.model.response.ResponseModel;
 import com.sebatmedikal.model.response.ResponseModelError;
 import com.sebatmedikal.model.response.ResponseModelSuccess;
 import com.sebatmedikal.service.OperationService;
+import com.sebatmedikal.service.UserService;
 import com.sebatmedikal.util.NullUtil;
 
 @RestController
@@ -27,6 +29,9 @@ import com.sebatmedikal.util.NullUtil;
 public class OperationRestController {
 	@Autowired
 	private OperationService operationService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private UserSession userSession;
@@ -65,6 +70,11 @@ public class OperationRestController {
 
 	private ResponseModel findAll() {
 		List<Operation> operations = operationService.findAll();
+		
+		User currentUser = userSession.getUser();
+		currentUser.setReadedOperationsDate(new Date());
+		userService.save(currentUser);
+		
 		return new ResponseModelSuccess().setContent(operations);
 	}
 
@@ -79,6 +89,11 @@ public class OperationRestController {
 
 	private ResponseModel page(int pageIndex) {
 		List<Operation> products = operationService.getOperationPage(pageIndex, GeneralConfiguration.PAGESIZE);
+		
+		User currentUser = userSession.getUser();
+		currentUser.setReadedOperationsDate(new Date());
+		userService.save(currentUser);
+		
 		return new ResponseModelSuccess().setContent(products);
 	}
 

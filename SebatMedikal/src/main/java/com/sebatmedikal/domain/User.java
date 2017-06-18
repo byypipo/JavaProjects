@@ -59,6 +59,15 @@ public class User {
 	@Column(name = "lastLoginDate")
 	private Date lastLoginDate;
 
+	@Column
+	private Date readedOperationsDate;
+	
+	@Column
+	private Date readedBrandsDate;
+	
+	@Column
+	private Date readedProductsDate;
+
 	@Column(nullable = false)
 	private String createdBy;
 
@@ -124,7 +133,7 @@ public class User {
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
-	
+
 	public String getFcmRegistrationId() {
 		return fcmRegistrationId;
 	}
@@ -163,6 +172,30 @@ public class User {
 
 	public void setLastLoginDate(Date lastLoginDate) {
 		this.lastLoginDate = lastLoginDate;
+	}
+	
+	public Date getReadedOperationsDate() {
+		return readedOperationsDate;
+	}
+
+	public void setReadedOperationsDate(Date readedOperationsDate) {
+		this.readedOperationsDate = readedOperationsDate;
+	}
+
+	public Date getReadedBrandsDate() {
+		return readedBrandsDate;
+	}
+
+	public void setReadedBrandsDate(Date readedBrandsDate) {
+		this.readedBrandsDate = readedBrandsDate;
+	}
+
+	public Date getReadedProductsDate() {
+		return readedProductsDate;
+	}
+
+	public void setReadedProductsDate(Date readedProductsDate) {
+		this.readedProductsDate = readedProductsDate;
 	}
 
 	public String getCreatedBy() {

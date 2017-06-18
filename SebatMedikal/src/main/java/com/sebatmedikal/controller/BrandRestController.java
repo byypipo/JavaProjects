@@ -3,6 +3,7 @@ package com.sebatmedikal.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ import com.sebatmedikal.model.response.ResponseModelError;
 import com.sebatmedikal.model.response.ResponseModelSuccess;
 import com.sebatmedikal.service.BrandService;
 import com.sebatmedikal.service.ProductService;
+import com.sebatmedikal.service.UserService;
 import com.sebatmedikal.util.LogUtil;
 import com.sebatmedikal.util.NullUtil;
 
@@ -39,6 +41,9 @@ public class BrandRestController {
 
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private UserSession userSession;
@@ -83,6 +88,11 @@ public class BrandRestController {
 
 	public ResponseModel findAll() {
 		List<Brand> brands = brandService.findAll();
+
+		User currentUser = userSession.getUser();
+		currentUser.setReadedBrandsDate(new Date());
+		userService.save(currentUser);
+
 		return new ResponseModelSuccess().setContent(brands);
 	}
 
