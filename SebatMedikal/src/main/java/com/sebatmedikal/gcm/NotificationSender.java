@@ -40,8 +40,10 @@ public class NotificationSender {
 
 	public static void login(GcmPushImpl gcmPushImpl, ArrayList<String> usersFcmRegIds, User user) {
 		Notification notification = new Notification().setTitle(SecurityConfiguration.LOGIN).setBody(new Date().toString());
+		byte[] image = user.getImage();
+		user.setImage(null);
 		String data = Mapper.writeValueAsString(user);
-
+		user.setImage(image);
 		LogUtil.logMessage(NotificationSender.class, "LOGIN User: " + data);
 
 		GcmPushInfo gcmPushInfo = new GcmPushInfo(usersFcmRegIds, data, notification);
@@ -50,8 +52,10 @@ public class NotificationSender {
 
 	public static void logout(GcmPushImpl gcmPushImpl, ArrayList<String> usersFcmRegIds, User user) {
 		Notification notification = new Notification().setTitle(SecurityConfiguration.LOGOUT).setBody(new Date().toString());
+		byte[] image = user.getImage();
+		user.setImage(null);
 		String data = Mapper.writeValueAsString(user);
-
+		user.setImage(image);
 		LogUtil.logMessage(NotificationSender.class, "LOGOUT User: " + data);
 
 		GcmPushInfo gcmPushInfo = new GcmPushInfo(usersFcmRegIds, data, notification);
@@ -90,22 +94,21 @@ public class NotificationSender {
 				return;
 			}
 
+			if (NullUtil.isNull(gcmPushInfo)) {
+				return;
+			}
+
+			if (NullUtil.isNull(gcmPushInfo.getRegIdList())) {
+				return;
+			}
+
+			if (gcmPushInfo.getRegIdList().isEmpty()) {
+				return;
+			}
+
 			gcmPushImpl.sendPush(gcmPushInfo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) throws Exception {
-		// GcmPushImpl gcmPushImpl = new
-		// GcmPushImpl(SecurityConfiguration.FCM_SERVER_KEY);
-		// ArrayList<String> regIds = new ArrayList<>();
-		// regIds.add("czigGDynriM:APA91bEr91-U_nyGadFotz4X-NjSkHOC-qVDjLxn40ri-aX6OuAIJ9p2e1J51eCU3_bhdcerfzOh4Mw2EPC8u55IybcpIvrxXhkEUucY3mpyDAmeJjMmU8d11l-9w05xdqfx1sxZOvJU");
-		//
-		// serverOnline(gcmPushImpl, regIds);
-
-		String json = "{\"id\":4,\"operationType\":{\"id\":2,\"operationTypeName\":\"SATIM\",\"sale\":true,\"note\":null,\"createdBy\":\"sebat.medikal\",\"createdDate\":1497156734363},\"product\":{\"id\":1,\"productName\":\"PRODUCT001\",\"barcod\":null,\"price\":10.10,\"image\":null,\"brand\":{\"id\":2,\"brandName\":\"BRAND02\",\"image\":null,\"note\":null,\"createdBy\":\"sebat.medikal\",\"createdDate\":1497156734281},\"note\":null,\"stock\":{\"id\":1,\"count\":425,\"createdBy\":\"sebat.medikal\",\"createdDate\":1497156734286},\"createdBy\":\"sebat.medikal\",\"createdDate\":1497156734294},\"count\":1,\"totalPrice\":10.1,\"note\":null,\"createdBy\":\"sebat.medikal\",\"createdDate\":1497156734414}";
-		System.out.println(json);
-
 	}
 }
