@@ -17,6 +17,10 @@ public class LoginService {
 		loginRepository.save(login);
 	}
 
+	public void save(Iterable<Login> logins) {
+		loginRepository.save(logins);
+	}
+
 	public Login findLogin(String username) {
 		return loginRepository.findByUsernameAndEndDateIsNull(username);
 	}

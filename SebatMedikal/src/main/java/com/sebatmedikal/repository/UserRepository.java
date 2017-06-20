@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	User findByUsernameAndPassword(String username, String password);
 
 	List<User> findByRole(Role role);
+
+	List<User> findByOnline(boolean online);
 }

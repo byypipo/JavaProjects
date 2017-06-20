@@ -63,6 +63,8 @@ public class FirstDataInitializer implements CommandLineRunner {
 			LogUtil.logMessage(this.getClass(), operationTypes.size() + " operationType saved");
 		}
 
+		userService.logoutAll();
+
 		GcmPushImpl gcmPushImpl = new GcmPushImpl(SecurityConfiguration.FCM_SERVER_KEY);
 		NotificationSender.serverOnline(gcmPushImpl, userService.findAllFcmRegistrationIds());
 	}

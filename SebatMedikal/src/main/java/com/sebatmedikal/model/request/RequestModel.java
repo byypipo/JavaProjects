@@ -60,6 +60,11 @@ public class RequestModel {
 			return false;
 		}
 
+		rm.setOperation(trim(rm.getOperation()));
+		rm.setParameter01(trim(rm.getParameter01()));
+		rm.setParameter02(trim(rm.getParameter02()));
+		rm.setParameter03(trim(rm.getParameter03()));
+
 		if (NullUtil.isNull(rm.getOperation())) {
 			LogUtil.logMessage(RequestModel.class, Level.WARNING, "Operation is null");
 			return false;
@@ -96,5 +101,13 @@ public class RequestModel {
 		LogUtil.logMessage(RequestModel.class, "RequestModelAccessToken: " + rm.getAccessToken());
 
 		return true;
+	}
+
+	private static String trim(String text) {
+		if (NullUtil.isNull(text)) {
+			return text;
+		}
+
+		return text.trim();
 	}
 }

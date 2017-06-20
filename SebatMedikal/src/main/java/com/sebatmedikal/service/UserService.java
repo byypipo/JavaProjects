@@ -119,6 +119,32 @@ public class UserService {
 		return true;
 	}
 
+	public void logoutAll() {
+		List<Login> loginUsers = loginService.findOnlineAll();
+
+		for (int i = 0; i < loginUsers.size(); i++) {
+			LogUtil.logMessage(getClass(), "loginUsers.get(i): " + loginUsers.get(i).getUsername());
+			loginUsers.get(i).setEndDate(new Date());
+			loginService.save(loginUsers.get(i));
+			User user = userRepository.findByUsername(loginUsers.get(i).getUsername());
+			user.setLastLoginDate(loginUsers.get(i).getBeginDate());
+			user.setOnline(false);
+		}
+		LogUtil.logMessage(getClass(), loginUsers.size() + " users logout");
+
+		List<User> onlineUsers = userRepository.findByOnline(true);
+		for (int i = 0; i < onlineUsers.size(); i++) {
+			LogUtil.logMessage(getClass(), "onlineUsers.get(i): " + onlineUsers.get(i).getUsername());
+			onlineUsers.get(i).setLastLoginDate(new Date());
+			onlineUsers.get(i).setOnline(false);
+		}
+
+		if (NullUtil.isNotNull(onlineUsers)) {
+			userRepository.save(onlineUsers);
+			LogUtil.logMessage(getClass(), onlineUsers.size() + " zombie users logout");
+		}
+	}
+
 	public boolean changePassword(String username, String password, String newPassword) {
 		User user = userRepository.findByUsernameAndPassword(username, password);
 		if (NullUtil.isNull(user)) {
